@@ -20,7 +20,7 @@ export const RATE_LIMITS = {
 export const LIMIT_QUERY_PARAM = {
   NETWORK_DESCRIPTION: {
     LINES: 10,
-    STOPS: 100,
+    STOPS: 10, // FIXME : Should be 100 according to the documentation
   },
   OPERATION_MONITORING: {
     VEHICLE_POSITION: 10,
