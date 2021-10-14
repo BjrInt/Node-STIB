@@ -28,3 +28,7 @@ export const LIMIT_QUERY_PARAM = {
     MESSAGE_BY_LINE: 10,
   }
 }
+
+export const DEFAULT_OPTIONS = {
+  throttle: false
+}
