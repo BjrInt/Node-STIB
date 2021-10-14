@@ -40,8 +40,10 @@ export const httpQuery = (token, endpoint, queryParams) => new Promise((resolve,
           return reject({error: 'MISSING_CREDENTIALS'})
         else if(ret.match('Invalid Credentials'))
           return reject({error: 'INVALID_CREDENTIALS'})
+        else if(ret.match('Message throttled out'))
+          return reject({error: 'RATE_LIMIT_EXCEEDED'})
         
-        return reject(err)
+        return reject({error: 'INVALID_RESPONSE'})
       }
     })
 
@@ -49,15 +51,4 @@ export const httpQuery = (token, endpoint, queryParams) => new Promise((resolve,
   })
   
   req.end()
-})
-
-export const Throttler = () => ({
-  NETWORK_DESCRIPTION: {
-    init: Date.now(),
-    queries: 0,
-  },
-  OPERATION_MONITORING: {
-    init: Date.now(),
-    queries: 0,
-  },
 })
