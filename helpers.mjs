@@ -1,7 +1,12 @@
 import { request } from 'https'
 import { Buffer } from 'buffer'
 
-import { BASE_URL } from './constants.mjs'
+import { 
+  BASE_URL,
+  ENDPOINTS,
+  LIMIT_QUERY_PARAM,
+  RATE_LIMITS
+} from './constants.mjs'
 
 export const base64Encode = str => Buffer.from(str).toString('base64')
 
@@ -58,3 +63,22 @@ export const httpQuery = (token, endpoint, queryParams) => new Promise((resolve,
   
   req.end()
 })
+
+export const groupedQueries = (arg, token, endpoint, resource, responseCallback) => {
+  return new Promise((resolve, reject) => {
+    if(!token)
+      return reject({error: 'NO_TOKEN'})
+    
+    if(arg.length > LIMIT_QUERY_PARAM[endpoint][resource] * RATE_LIMITS[endpoint])
+      return reject({error: 'RATE_LIMIT_EXCEEDED'})
+    
+    const queries = splitInSubgroupOf(arg, LIMIT_QUERY_PARAM[endpoint][resource])
+                    .map(q => httpQuery(token, ENDPOINTS[endpoint][resource], q))
+
+    return Promise.all(queries)
+            .then((data) => (
+              resolve( responseCallback(data) ) 
+            ))
+            .catch(err => reject(err))
+  })
+}
