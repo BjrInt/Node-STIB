@@ -1,12 +1,10 @@
 import { 
   httpQuery,
-  splitInSubgroupOf,
+  groupedQueries
 } from './helpers.mjs'
 import { 
   ENDPOINTS,
-  LIMIT_QUERY_PARAM,
 } from './constants.mjs'
-import { RATE_LIMITS } from './constants.mjs'
 
 class Stib{
   constructor(token){
@@ -20,36 +18,54 @@ class Stib{
     return response
   }
 
-  getLinesDescription(lines){
-    return new Promise((resolve, reject) => {
-      if(lines.length > LIMIT_QUERY_PARAM.NETWORK_DESCRIPTION.LINES * RATE_LIMITS.NETWORK_DESCRIPTION)
-        return reject({error: 'RATE_LIMIT_EXCEEDED'})
-      
-      const queries = splitInSubgroupOf(lines, LIMIT_QUERY_PARAM.NETWORK_DESCRIPTION.LINES)
-                      .map(q => httpQuery(this.token, ENDPOINTS.NETWORK_DESCRIPTION.LINES, q))
-      
-      return Promise.all(queries)
-             .then((data) => (
-                resolve( data.map(d => d.lines).flat() ) 
-              ))
-              .catch(err => reject(err))
-    })
+  getLineDescription(lines){
+    return groupedQueries(
+      lines, 
+      this.token,
+      'NETWORK_DESCRIPTION',
+      'LINES',
+      data => data.map(d => d.lines).flat()
+    )
   }
 
-  getStopsDescription(stops){
-    return new Promise((resolve, reject) => {
-      if(stops.length > LIMIT_QUERY_PARAM.NETWORK_DESCRIPTION.STOPS * RATE_LIMITS.NETWORK_DESCRIPTION)
-        return reject({error: 'RATE_LIMIT_EXCEEDED'})
-      
-      const queries = splitInSubgroupOf(stops, LIMIT_QUERY_PARAM.NETWORK_DESCRIPTION.STOPS)
-                      .map(q => httpQuery(this.token, ENDPOINTS.NETWORK_DESCRIPTION.STOPS, q))
+  getStopDescription(stops){
+    return groupedQueries(
+      stops, 
+      this.token,
+      'NETWORK_DESCRIPTION',
+      'STOPS',
+      data => data.map(d => d.points).flat()
+    )
+  }
 
-      return Promise.all(queries)
-             .then((data) => (
-                resolve( data.map(d => d.points).flat() ) 
-              ))
-              .catch(err => reject(err))
-    })
+  getVehiclePosition(lines){
+    return groupedQueries(
+      lines, 
+      this.token,
+      'OPERATION_MONITORING',
+      'VEHICLE_POSITION',
+      data => data.map(d => d.lines).flat()
+    )
+  }
+
+  getMessageByLine(lines){
+    return groupedQueries(
+      lines, 
+      this.token,
+      'OPERATION_MONITORING',
+      'MESSAGE_BY_LINE',
+      data => data.map(d => d.messages)
+    )
+  }
+
+  getWaitingTime(stops){
+    return groupedQueries(
+      stops, 
+      this.token,
+      'OPERATION_MONITORING',
+      'WAITING_TIME',
+      data => data.map(d => d.points).flat()
+    )
   }
 }
 
