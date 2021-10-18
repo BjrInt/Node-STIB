@@ -6,11 +6,12 @@ import {
   ENDPOINTS,
   LIMIT_QUERY_PARAM,
   RATE_LIMITS
-} from './constants.mjs'
+} from './constants'
+import type { CredentialsResponse } from './types'
 
-export const base64Encode = str => Buffer.from(str).toString('base64')
+export const base64Encode = (str: string) : string => Buffer.from(str).toString('base64')
 
-export const splitInSubgroupOf = (a, size) => {
+export const splitInSubgroupOf = (a: any[], size: number) : any[] => {
   const subgroups = a.length / size 
   const returnValue = []
 
@@ -23,15 +24,13 @@ export const splitInSubgroupOf = (a, size) => {
   return returnValue
 }
 
-export const httpQuery = (token, endpoint, queryParams) => new Promise((resolve, reject) => {
+export const httpQuery = (token: string, endpoint: string, queryParams: number[] | string[]) : Promise<any[]> => new Promise((resolve, reject) => {
   const options = {
-    method: Array.isArray(token) ? 'POST' : 'GET',
+    method: 'GET',
     hostname: BASE_URL,
     path: `${endpoint}${queryParams.join('%2C')}`,
     headers: {
-      Authorization: Array.isArray(token)
-                     ? `Basic ${base64Encode(token[0]+':'+token[1])}` // refresh token query
-                     : `Bearer ${token}` // all other queries
+      Authorization: `Bearer ${token}`
     }
   }
   
@@ -64,10 +63,42 @@ export const httpQuery = (token, endpoint, queryParams) => new Promise((resolve,
   req.end()
 })
 
-export const groupedQueries = (arg, token, endpoint, resource, responseCallback) => {
-  return new Promise((resolve, reject) => {
+export const tokenQuery = (cKey: string, cSecret: string) : Promise<CredentialsResponse> => new Promise((resolve, reject) => {
+  const options = {
+    method: 'POST',
+    hostname: BASE_URL,
+    path: ENDPOINTS.TOKEN,
+    headers: {
+      Authorization: `Basic ${base64Encode(cKey+':'+cSecret)}`
+    }
+  }
+  
+  const req = request(options, response => {
+    const chunks = []
+  
+    response.on('data', c => { chunks.push(c) })
+  
+    response.on('end', () => {
+      const ret = Buffer.concat(chunks).toString()
+      try{
+        const json = JSON.parse(ret)
+        return resolve(json)
+      }
+      catch(err){        
+        return reject(err)
+      }
+    })
+
+    response.on('error', err => reject(err))
+  })
+  
+  req.end()
+})
+
+export const groupedQueries = (arg: number[] | string[], token: string, endpoint: string, resource: string, responseCallback: (ar: any[]) => any[]) => {
+  return new Promise<any[]>((resolve, reject) => {
     if(!token)
-      return reject({error: 'NO_TOKEN'})
+      return reject({error: 'MISSING_CREDENTIALS'})
     
     if(arg.length > LIMIT_QUERY_PARAM[endpoint][resource] * RATE_LIMITS[endpoint])
       return reject({error: 'RATE_LIMIT_EXCEEDED'})
@@ -76,9 +107,7 @@ export const groupedQueries = (arg, token, endpoint, resource, responseCallback)
                     .map(q => httpQuery(token, ENDPOINTS[endpoint][resource], q))
 
     return Promise.all(queries)
-            .then((data) => (
-              resolve( responseCallback(data) ) 
-            ))
+            .then(data => resolve( responseCallback(data) ))
             .catch(err => reject(err))
   })
 }
