@@ -9,7 +9,8 @@ export const ENDPOINTS = {
     VEHICLE_POSITION: '/OperationMonitoring/4.0/VehiclePositionByLine/',
     WAITING_TIME: '/OperationMonitoring/4.0/PassingTimeByPoint/',
     MESSAGE_BY_LINE: '/OperationMonitoring/4.0/MessageByLine/',
-  }
+  },
+  TOKEN: '/token?grant_type=client_credentials',
 }
 
 export const RATE_LIMITS = {

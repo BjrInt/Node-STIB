@@ -1,5 +1,9 @@
 import { request } from 'https'
+import { Buffer } from 'buffer'
+
 import { BASE_URL } from './constants.mjs'
+
+export const base64Encode = str => Buffer.from(str).toString('base64')
 
 export const splitInSubgroupOf = (a, size) => {
   const subgroups = a.length / size 
@@ -16,11 +20,13 @@ export const splitInSubgroupOf = (a, size) => {
 
 export const httpQuery = (token, endpoint, queryParams) => new Promise((resolve, reject) => {
   const options = {
-    method: 'GET',
+    method: Array.isArray(token) ? 'POST' : 'GET',
     hostname: BASE_URL,
     path: `${endpoint}${queryParams.join('%2C')}`,
     headers: {
-      Authorization: `Bearer ${token}`
+      Authorization: Array.isArray(token)
+                     ? `Basic ${base64Encode(token[0]+':'+token[1])}` // refresh token query
+                     : `Bearer ${token}` // all other queries
     }
   }
   

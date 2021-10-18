@@ -4,13 +4,20 @@ import {
 } from './helpers.mjs'
 import { 
   ENDPOINTS,
-  LIMIT_QUERY_PARAM,  
+  LIMIT_QUERY_PARAM,
 } from './constants.mjs'
 import { RATE_LIMITS } from './constants.mjs'
 
 class Stib{
   constructor(token){
     this.token = token
+  }
+
+  async refreshToken(cKey, cSecret){
+    const response = await httpQuery([cKey, cSecret], ENDPOINTS.TOKEN, [])
+    this.token = response.access_token
+
+    return response
   }
 
   getLinesDescription(lines){
