@@ -53,7 +53,7 @@ var Stib = /** @class */ (function () {
                     case 1:
                         response = _a.sent();
                         this.token = response.access_token;
-                        return [3 /*break*/, 3];
+                        return [2 /*return*/, response];
                     case 2:
                         err_1 = _a.sent();
                         return [2 /*return*/, err_1];

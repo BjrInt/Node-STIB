@@ -15,6 +15,8 @@ export class Stib{
     try{
       const response = await tokenQuery(cKey, cSecret)
       this.token = response.access_token
+
+      return response
     }
     catch(err){
       return err
