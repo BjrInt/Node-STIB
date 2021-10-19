@@ -59,7 +59,7 @@ export class Stib{
       this.token,
       'OPERATION_MONITORING',
       'MESSAGE_BY_LINE',
-      (data: any[]) => data.map(d => d.messages)
+      (data: any[]) => data.map(d => d.messages).flat()
     )
   }
 

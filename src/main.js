@@ -72,7 +72,7 @@ var Stib = /** @class */ (function () {
         return (0, helpers_1.groupedQueries)(lines, this.token, 'OPERATION_MONITORING', 'VEHICLE_POSITION', function (data) { return data.map(function (d) { return d.lines; }).flat(); });
     };
     Stib.prototype.getMessageByLine = function (lines) {
-        return (0, helpers_1.groupedQueries)(lines, this.token, 'OPERATION_MONITORING', 'MESSAGE_BY_LINE', function (data) { return data.map(function (d) { return d.messages; }); });
+        return (0, helpers_1.groupedQueries)(lines, this.token, 'OPERATION_MONITORING', 'MESSAGE_BY_LINE', function (data) { return data.map(function (d) { return d.messages; }).flat(); });
     };
     Stib.prototype.getWaitingTime = function (stops) {
         return (0, helpers_1.groupedQueries)(stops, this.token, 'OPERATION_MONITORING', 'WAITING_TIME', function (data) { return data.map(function (d) { return d.points; }).flat(); });
