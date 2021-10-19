@@ -11,6 +11,8 @@ import type { CredentialsResponse } from './types'
 
 export const base64Encode = (str: string) : string => Buffer.from(str).toString('base64')
 
+export const _uniq = (ar: any[]) : any[] => [...new Set(ar)]
+
 export const splitInSubgroupOf = (a: any[], size: number) : any[] => {
   const subgroups = a.length / size 
   const returnValue = []
@@ -103,7 +105,7 @@ export const groupedQueries = (arg: number[] | string[], token: string, endpoint
     if(arg.length > LIMIT_QUERY_PARAM[endpoint][resource] * RATE_LIMITS[endpoint])
       return reject({error: 'RATE_LIMIT_EXCEEDED'})
     
-    const queries = splitInSubgroupOf(arg, LIMIT_QUERY_PARAM[endpoint][resource])
+    const queries = splitInSubgroupOf(_uniq(arg), LIMIT_QUERY_PARAM[endpoint][resource])
                     .map(q => httpQuery(token, ENDPOINTS[endpoint][resource], q))
 
     return Promise.all(queries)
