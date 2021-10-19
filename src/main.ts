@@ -12,15 +12,13 @@ export class Stib{
   }
 
   async refreshToken(cKey: string, cSecret:string) : Promise<CredentialsResponse>{
-    // try{
-    //   const response : Promise<CredentialsResponse> = await tokenQuery(cKey, cSecret)
-    //   this.token = response.access_token
-    // }
-    // catch(err){
-    //   return err
-    // }
-
-    return await tokenQuery(cKey, cSecret)
+    try{
+      const response = await tokenQuery(cKey, cSecret)
+      this.token = response.access_token
+    }
+    catch(err){
+      return err
+    }
   }
 
   getLineDescription(lines: string[] | number[]){

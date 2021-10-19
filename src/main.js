@@ -44,18 +44,20 @@ var Stib = /** @class */ (function () {
     }
     Stib.prototype.refreshToken = function (cKey, cSecret) {
         return __awaiter(this, void 0, void 0, function () {
+            var response, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, (0, helpers_1.tokenQuery)(cKey, cSecret)];
-                    case 1: 
-                    // try{
-                    //   const response : Promise<CredentialsResponse> = await tokenQuery(cKey, cSecret)
-                    //   this.token = response.access_token
-                    // }
-                    // catch(err){
-                    //   return err
-                    // }
-                    return [2 /*return*/, _a.sent()];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, (0, helpers_1.tokenQuery)(cKey, cSecret)];
+                    case 1:
+                        response = _a.sent();
+                        this.token = response.access_token;
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_1 = _a.sent();
+                        return [2 /*return*/, err_1];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
