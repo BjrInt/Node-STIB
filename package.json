@@ -3,18 +3,19 @@
     "@types/node": "^16.11.1",
     "typescript": "^4.4.4"
   },
-  "name": "node-stib",
+  "name": "stib",
   "description": "A set of Node.js helpers to fetch the Brussels Public Transport APIs (STIB).",
   "version": "1.0.0",
-  "main": "src/main.js",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
   "scripts": {
-    "compile": "tsc src/main.ts --downlevelIteration"
+    "compile": "tsc"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BjrInt/Node-STIB.git"
   },
-  "author": "",
+  "author": "Bonjour Internet",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/BjrInt/Node-STIB/issues"

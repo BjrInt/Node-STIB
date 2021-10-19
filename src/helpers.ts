@@ -37,7 +37,7 @@ export const httpQuery = (token: string, endpoint: string, queryParams: number[]
   }
   
   const req = request(options, response => {
-    const chunks = []
+    const chunks: any[] = []
   
     response.on('data', c => { chunks.push(c) })
   
@@ -76,7 +76,7 @@ export const tokenQuery = (cKey: string, cSecret: string) : Promise<CredentialsR
   }
   
   const req = request(options, response => {
-    const chunks = []
+    const chunks: any[] = []
   
     response.on('data', c => { chunks.push(c) })
   
