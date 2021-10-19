@@ -2,7 +2,14 @@ import {
   tokenQuery,
   groupedQueries
 } from './helpers'
-import type { CredentialsResponse } from './types'
+import type { 
+  CredentialsResponse, 
+  LineDescription, 
+  LinePositions, 
+  Message, 
+  StopDescription,
+  WaitingTime
+} from './types'
 
 export class Stib{
   token: string
@@ -23,7 +30,7 @@ export class Stib{
     }
   }
 
-  getLineDescription(lines: string[] | number[]){
+  getLineDescription(lines: string[] | number[]) : Promise<Array<LineDescription>>{
     return groupedQueries(
       lines, 
       this.token,
@@ -33,7 +40,7 @@ export class Stib{
     )
   }
 
-  getStopDescription(stops: string[] | number[]){
+  getStopDescription(stops: string[] | number[]) : Promise<Array<StopDescription>>{
     return groupedQueries(
       stops, 
       this.token,
@@ -43,7 +50,7 @@ export class Stib{
     )
   }
 
-  getVehiclePosition(lines: string[] | number[]){
+  getVehiclePosition(lines: string[] | number[]) : Promise<Array<LinePositions>>{
     return groupedQueries(
       lines, 
       this.token,
@@ -53,7 +60,7 @@ export class Stib{
     )
   }
 
-  getMessageByLine(lines: string[] | number[]){
+  getMessageByLine(lines: string[] | number[]) : Promise<Array<Message>>{
     return groupedQueries(
       lines, 
       this.token,
@@ -63,7 +70,7 @@ export class Stib{
     )
   }
 
-  getWaitingTime(stops: string[] | number[]){
+  getWaitingTime(stops: string[] | number[]) : Promise<Array<WaitingTime>>{
     return groupedQueries(
       stops, 
       this.token,
