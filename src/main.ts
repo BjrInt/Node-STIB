@@ -18,7 +18,7 @@ export class Stib{
     this.token = token
   }
 
-  async refreshToken(cKey: string, cSecret:string) : Promise<CredentialsResponse>{
+  async getToken(cKey: string, cSecret:string) : Promise<CredentialsResponse>{
     try{
       const response = await tokenQuery(cKey, cSecret)
       this.token = response.access_token
