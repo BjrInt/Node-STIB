@@ -99,7 +99,7 @@ export const tokenQuery = (cKey: string, cSecret: string) : Promise<CredentialsR
 
 export const groupedQueries = (arg: number[] | string[], token: string, endpoint: string, resource: string, responseCallback: (ar: any[]) => any[]) => {
   return new Promise<any[]>((resolve, reject) => {
-    if(!token)
+    if(token.length === 0)
       return reject({error: 'MISSING_CREDENTIALS'})
     
     const argUniq = _uniq(arg)

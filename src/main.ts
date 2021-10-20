@@ -12,10 +12,10 @@ import type {
 } from './types'
 
 export class Stib{
-  token: string
+  token: string 
 
   constructor(token?:string){
-    this.token = token
+    this.token = token ?? ''
   }
 
   async getToken(consumerKey: string, consumerSecret:string) : Promise<CredentialsResponse>{
