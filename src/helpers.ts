@@ -102,10 +102,12 @@ export const groupedQueries = (arg: number[] | string[], token: string, endpoint
     if(!token)
       return reject({error: 'MISSING_CREDENTIALS'})
     
-    if(arg.length > LIMIT_QUERY_PARAM[endpoint][resource] * RATE_LIMITS[endpoint])
+    const argUniq = _uniq(arg)
+    
+    if(argUniq.length > LIMIT_QUERY_PARAM[endpoint][resource] * RATE_LIMITS[endpoint])
       return reject({error: 'RATE_LIMIT_EXCEEDED'})
     
-    const queries = splitInSubgroupOf(_uniq(arg), LIMIT_QUERY_PARAM[endpoint][resource])
+    const queries = splitInSubgroupOf(argUniq, LIMIT_QUERY_PARAM[endpoint][resource])
                     .map(q => httpQuery(token, ENDPOINTS[endpoint][resource], q))
 
     return Promise.all(queries)
