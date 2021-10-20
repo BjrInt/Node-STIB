@@ -18,16 +18,11 @@ export class Stib{
     this.token = token
   }
 
-  async getToken(cKey: string, cSecret:string) : Promise<CredentialsResponse>{
-    try{
-      const response = await tokenQuery(cKey, cSecret)
-      this.token = response.access_token
+  async getToken(consumerKey: string, consumerSecret:string) : Promise<CredentialsResponse>{
+    const response = await tokenQuery(consumerKey, consumerSecret)
+    this.token = response.access_token
 
-      return response
-    }
-    catch(err){
-      return err
-    }
+    return response
   }
 
   getLineDescription(lines: string[] | number[]) : Promise<Array<LineDescription>>{
