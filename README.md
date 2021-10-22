@@ -35,18 +35,17 @@ The most straightforward way to authenticate is using a pair of consumer key and
 This will generate an expirable token for further communications with the API.
 
 ```javascript
-const { Stib } = require('node-stib')
+const { Stib } = require("node-stib");
 
-async const fetchMetroLine5Description = () => {
-  const stib = new Stib()
-  const token = await stib.getToken('consumerKey', 'consumerSecret')
+const fetchMetroLine5Description = async () => {
+  const stib = new Stib();
+  const token = await stib.getToken("consumerKey", "consumerSecret");
 
-  console.log(token)
+  console.log(token);
 
   // Once authenticated you can use the API
-  return await stib.getLineDescription([5])
-}
-
+  return await stib.getLineDescription([5]);
+};
 ```
 
 #### Authenticate with a token
@@ -54,53 +53,55 @@ async const fetchMetroLine5Description = () => {
 Although not reccomended you can also directly connect to the API using a pre-generated token.
 
 ```javascript
-const { Stib } = require('node-stib')
+const { Stib } = require("node-stib");
 
-async const fetchMetroLine5Description = () => {
-  const stib = new Stib('tokentokentoken')
+const fetchMetroLine5Description = async () => {
+  const stib = new Stib("tokentokentoken");
 
-  return await stib.getLineDescription([5])
-}
+  return await stib.getLineDescription([5]);
+};
 ```
 
 ### 2.2. <a name='Getallstopscoordinatesforagivenline'></a>Get all stops coordinates for a given line
 
 ```javascript
-const { Stib } = require('node-stib')
+const { Stib } = require("node-stib");
 
-async const fetchStopCoordinates = () => {
-  const stib = new Stib()
-  await stib.getToken('consumerKey', 'consumerSecret')
+const fetchStopCoordinates = async () => {
+  const stib = new Stib();
+  await stib.getToken("consumerKey", "consumerSecret");
 
-  const lines = await stib.getLineDescription([61, 92, 93])
+  const lines = await stib.getLineDescription([61, 92, 93]);
   const points = lines
-                 .map(line => [ ...line.points ])
-                 .flat()
-                 .map(point => point.id)
+    .map(line => [...line.points])
+    .flat()
+    .map(point => point.id);
 
-  const stopsCoordinates = await stib.getStopDescription(points)
+  const stopsCoordinates = await stib.getStopDescription(points);
 
-  return stopsCoordinates
-}
+  return stopsCoordinates;
+};
 ```
 
 ### 2.3. <a name='Countallmovingvehicles'></a>Count all moving vehicles
 
 ```javascript
-const { Stib } = require('node-stib')
+const { Stib } = require("node-stib");
 
-async const countAllMovingVehicles = () => {
-  const stib = new Stib()
-  await stib.getToken('consumerKey', 'consumerSecret')
+const countAllMovingVehicles = async () => {
+  const stib = new Stib();
+  await stib.getToken("consumerKey", "consumerSecret");
 
-  const lines = []
-  for(let i=1;i<100;i++) lines.push(i)
+  const lines = [];
+  for (let i = 1; i < 100; i++) lines.push(i);
 
-  const movingVehicles = await stib.getVehiclePosition(lines)
+  const movingVehicles = await stib.getVehiclePosition(lines);
 
-  return movingVehicles
-         .reduce((ac, cv) => ac += cv.vehiclePositions.length, 0)
-}
+  return movingVehicles.reduce(
+    (ac, cv) => (ac += cv.vehiclePositions.length),
+    0
+  );
+};
 ```
 
 ## 3. <a name='APIdocumentation'></a>API documentation
