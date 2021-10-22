@@ -5,7 +5,7 @@
   },
   "name": "node-stib",
   "description": "A set of Node.js helpers to fetch the Brussels Public Transport APIs (STIB)",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
